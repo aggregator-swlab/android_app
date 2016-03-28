@@ -3,6 +3,7 @@ package com.example.harrispaul.aggregator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,10 +18,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -28,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,316 +45,132 @@ import java.util.List;
 /**
  * Created by Harrispaul on 3/14/2016.
  */
+
 public class MainActivity extends AppCompatActivity {
-    public void onCreate(Bundle savedInstances) {
-        super.onCreate(savedInstances);
-        setContentView(R.layout.main);
-        if (savedInstances == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new SearchProduct())
-                    .commit();
-        }
+
+    ListView list;
+    String jsonStr = "{\"productInfoList\":[{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ2YBFZTV3S\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6 Plus\",\"productDescription\":\"\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-400x400-imaeymdqartzwz76.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-200x200-imaeymdqartzwz76.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-original-imaeymdqartzwz76.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-800x800-imaeymdqartzwz76.jpeg\"},\"maximumRetailPrice\":{\"amount\":65000.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":50890.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6-plus/p/itme7zgymhjqjccq?pid=MOBEYHZ2YBFZTV3S&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":false,\"emiAvailable\":null,\"discountPercentage\":21.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Silver\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYGPZZV9GQWZZ, MOBEYHZ2SSKPYGRK, MOBEYHZ2YBFZTV3S]\",\"colorVariants\":\"[MOBEFJG74WYMR4ZJ, MOBEFJG77J8DD6Z4, MOBEFJG77RWZQ4YJ, MOBEFJG7FS3CPHQZ, MOBEFJG7KHUB4S7Y, MOBEFJG7Q6AAUVGM, MOBEFJG7RZNK3YNV, MOBEFJG7YA8Y89JD, MOBEFJG7ZZUGGTT9, MOBEYGPZZV9GQWZZ, MOBEYHZ28ZYTRJYM, MOBEYHZ2JRQ6UVYF, MOBEYHZ2RVZHCMQK, MOBEYHZ2SSKPYGRK, MOBEYHZ2VXZM8HZD, MOBEYHZ2XVMKU4QN, MOBEYHZ2Z8N6RDFE]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ2JHVFHFBG\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-400x400-imaeymdqs5gm5xkz.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-200x200-imaeymdqs5gm5xkz.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-original-imaeymdqs5gm5xkz.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-800x800-imaeymdqs5gm5xkz.jpeg\"},\"maximumRetailPrice\":{\"amount\":71500.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":59775.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8ra5z7yx5c9j?pid=MOBEYHZ2JHVFHFBG&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":false,\"emiAvailable\":null,\"discountPercentage\":16.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Space Grey\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYHZ254METXXB, MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYGPZAHZQMCKZ, MOBEYHZ254METXXB, MOBEYHZ28FRMNDCW, MOBEYHZ2GY7HDHHG, MOBEYHZ2NUZGCHKN, MOBEYHZ2VRNZZ2J5, MOBEYHZ2VSVKHAZH, MOBEYHZ2YAXZMF2J]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYGPZAHZQMCKZ\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"The bigger the better - the Apple iPhone 6 is an exemplar of this phrase. The meticulously crafted iPhone 6 is truly an epitome of great taste and elegance. Beautiful Unibody Design Extremely thin, the iPhone 6 flaunts a seamless design with the smooth blend of anodised aluminium, stainless steel and the curved, polished glass. Incredibly light, the beautifully crafted iPhone 6 feels great in your hands. Thanks to its innovative design, the iPhone 6 provides an intuitive experience and is extremely easy to use. Brilliant Display Featuring the thinnest and most advanced Multi-Touch display ever made, the Apple iPhone 6 promises a high-contrast output with incredible colors and brightness on its 4.7 inch Retina HD display. A resolution of 1334x750 pixels, clear wide-angle viewing and an improved polariser - the iPhone 6 truly offers a bigger and better display. Power-Packed Performance Thanks to the all-new A8 processor with 64-bit architecture and an advanced 20 nanometre process, the iPhone 6 delivers an incredibly powerful performance while being extremely efficient. Get up to 50x faster CPU performance and up to 84x faster GPU performance with the iPhone 6. M8 Motion Coprocessor & Sensors Improve your iPhone's power efficiency with the M8 Motion Coprocessor that continuously measures data from your iPhone's different sensors such as accelerometer, compass, gyroscope and the new barometer. Camera Photos or videos - there is nothing that can beat the iPhone 6's iSight camera. The iPhone 6's 8 MP iSight camera gets new features such as a new sensor with Focus Pixels, improved face detection and exposure control. Also, now you can take amazing 1080p HD videos with the world's most popular camera. Security Make life easier with the iPhone 6's breakthrough Touch ID technology. Now you can securely access your phone with your fingerprint - no more worries about forgetting your pass code ever again. Moreover, the iPhone 6 lets you use your fingerprint to securely make purchases on iTunes or the App Store. Operating System The iPhone 6 comes with the biggest iOS release ever - the iOS 8. Featuring new capabilities and features, the world's advanced mobile operating system - the iOS 8 - gives you an incredible experience on your iPhone 6. Connectivity Thanks to the advanced Wi-Fi support with fast wireless performance, you can keep up with the world around you easily. Moreover, the iPhone 6 comes with Bluetooth and 3G support. Battery Take advantage of all the features of your highly efficient Apple iPhone 6 which boasts of an amazing battery life with up to 14 hours of 3G talk time and up to 250 hours of standby.\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-400x400-imaeymdqym6hsu7f.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-200x200-imaeymdqym6hsu7f.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-original-imaeymdqym6hsu7f.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-800x800-imaeymdqym6hsu7f.jpeg\"},\"maximumRetailPrice\":{\"amount\":56000.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":41499.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8dvfeuxxbm4r?pid=MOBEYGPZAHZQMCKZ&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":true,\"emiAvailable\":null,\"discountPercentage\":25.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Gold\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYHZ2NUZGCHKN, MOBEYHZ2YAXZMF2J, MOBEYGPZAHZQMCKZ]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYHZ254METXXB, MOBEYHZ28FRMNDCW, MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG, MOBEYHZ2NUZGCHKN, MOBEYHZ2VRNZZ2J5, MOBEYHZ2VSVKHAZH, MOBEYHZ2YAXZMF2J]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ254METXXB\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/x/x/b/apple-iphone-6-400x400-imaeynygkn5g4jzh.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/x/x/b/apple-iphone-6-200x200-imaeynygkn5g4jzh.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/x/x/b/apple-iphone-6-original-imaeynygkn5g4jzh.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/x/x/b/apple-iphone-6-800x800-imaeynygkn5g4jzh.jpeg\"},\"maximumRetailPrice\":{\"amount\":73000.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":61990.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8ra5z7yx5c9j?pid=MOBEYHZ254METXXB&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":false,\"emiAvailable\":null,\"discountPercentage\":15.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Gold\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG, MOBEYHZ254METXXB]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYGPZAHZQMCKZ, MOBEYHZ28FRMNDCW, MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG, MOBEYHZ2NUZGCHKN, MOBEYHZ2VRNZZ2J5, MOBEYHZ2VSVKHAZH, MOBEYHZ2YAXZMF2J]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ2VSVKHAZH\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"The bigger the better - the Apple iPhone 6 is an exemplar of this phrase. The meticulously crafted iPhone 6 is truly an epitome of great taste and elegance. Beautiful Unibody Design Extremely thin, the iPhone 6 flaunts a seamless design with the smooth blend of anodised aluminium, stainless steel and the curved, polished glass. Incredibly light, the beautifully crafted iPhone 6 feels great in your hands. Thanks to its innovative design, the iPhone 6 provides an intuitive experience and is extremely easy to use. Brilliant Display Featuring the thinnest and most advanced Multi-Touch display ever made, the Apple iPhone 6 promises a high-contrast output with incredible colors and brightness on its 4.7 inch Retina HD display. A resolution of 1334x750 pixels, clear wide-angle viewing and an improved polariser - the iPhone 6 truly offers a bigger and better display. Power-Packed Performance Thanks to the all-new A8 processor with 64-bit architecture and an advanced 20 nanometre process, the iPhone 6 delivers an incredibly powerful performance while being extremely efficient. Get up to 50x faster CPU performance and up to 84x faster GPU performance with the iPhone 6. M8 Motion Coprocessor & Sensors Improve your iPhone's power efficiency with the M8 Motion Coprocessor that continuously measures data from your iPhone's different sensors such as accelerometer, compass, gyroscope and the new barometer. Camera Photos or videos - there is nothing that can beat the iPhone 6's iSight camera. The iPhone 6's 8 MP iSight camera gets new features such as a new sensor with Focus Pixels, improved face detection and exposure control. Also, now you can take amazing 1080p HD videos with the world's most popular camera. Security Make life easier with the iPhone 6's breakthrough Touch ID technology. Now you can securely access your phone with your fingerprint - no more worries about forgetting your pass code ever again. Moreover, the iPhone 6 lets you use your fingerprint to securely make purchases on iTunes or the App Store. Operating System The iPhone 6 comes with the biggest iOS release ever - the iOS 8. Featuring new capabilities and features, the world's advanced mobile operating system - the iOS 8 - gives you an incredible experience on your iPhone 6. Connectivity Thanks to the advanced Wi-Fi support with fast wireless performance, you can keep up with the world around you easily. Moreover, the iPhone 6 comes with Bluetooth and 3G support. Battery Take advantage of all the features of your highly efficient Apple iPhone 6 which boasts of an amazing battery life with up to 14 hours of 3G talk time and up to 250 hours of standby.\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/a/z/h/apple-iphone-6-400x400-imaeynf5tzfkzaym.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/a/z/h/apple-iphone-6-200x200-imaeynf5tzfkzaym.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/a/z/h/apple-iphone-6-original-imaeynf5tzfkzaym.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/a/z/h/apple-iphone-6-800x800-imaeynf5tzfkzaym.jpeg\"},\"maximumRetailPrice\":{\"amount\":65000.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":49800.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8ra6fzzme5sz?pid=MOBEYHZ2VSVKHAZH&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":true,\"emiAvailable\":null,\"discountPercentage\":23.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Gold\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYHZ2VRNZZ2J5, MOBEYHZ2VSVKHAZH]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYGPZAHZQMCKZ, MOBEYHZ254METXXB, MOBEYHZ28FRMNDCW, MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG, MOBEYHZ2NUZGCHKN, MOBEYHZ2VRNZZ2J5, MOBEYHZ2YAXZMF2J]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ2VRNZZ2J5\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"The bigger the better - the Apple iPhone 6 is an exemplar of this phrase. The meticulously crafted iPhone 6 is truly an epitome of great taste and elegance. Beautiful Unibody Design Extremely thin, the iPhone 6 flaunts a seamless design with the smooth blend of anodised aluminium, stainless steel and the curved, polished glass. Incredibly light, the beautifully crafted iPhone 6 feels great in your hands. Thanks to its innovative design, the iPhone 6 provides an intuitive experience and is extremely easy to use. Brilliant Display Featuring the thinnest and most advanced Multi-Touch display ever made, the Apple iPhone 6 promises a high-contrast output with incredible colors and brightness on its 4.7 inch Retina HD display. A resolution of 1334x750 pixels, clear wide-angle viewing and an improved polariser - the iPhone 6 truly offers a bigger and better display. Power-Packed Performance Thanks to the all-new A8 processor with 64-bit architecture and an advanced 20-nanometre process, the iPhone 6 delivers an incredibly powerful performance while being extremely efficient. Get up to 50x faster CPU performance and up to 84x faster GPU performance with the iPhone 6. M8 Motion Coprocessor & Sensors Improve your iPhone's power efficiency with the M8 Motion Coprocessor that continuously measures data from your iPhone's different sensors such as an accelerometer, a compass, a gyroscope and a barometer. Camera Photos or videos - there is nothing that can beat the iPhone 6's iSight camera. The iPhone 6's 8 MP iSight camera gets new features such as a new sensor with Focus Pixels, improved face detection and exposure control. Also, now you can take amazing 1080p HD videos with the world's most popular camera. Security Make life easier with the iPhone 6's breakthrough Touch ID technology. Now you can securely access your phone with your fingerprint - no more worries about forgetting your passcode ever again. Moreover, the iPhone 6 lets you use your fingerprint to securely make purchases on iTunes or the App Store. Operating System The iPhone 6 comes with the biggest iOS release ever - the iOS 8. Featuring new capabilities and features, the world's advanced mobile operating system - the iOS 8 - gives you an incredible experience on your iPhone 6. Connectivity Thanks to the advanced Wi-Fi support with fast wireless performance, you can keep up with the world around you easily. Moreover, the iPhone 6 comes with Bluetooth and 3G support. Battery Take advantage of all the features of your highly efficient Apple iPhone 6 which boasts of an amazing battery life with up to 14 hours of 3G talk time and up to 250 hours of standby.\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/2/j/5/apple-iphone-6-400x400-imaeyny5fy253xy4.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/2/j/5/apple-iphone-6-200x200-imaeyny5fy253xy4.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/2/j/5/apple-iphone-6-original-imaeyny5fy253xy4.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/2/j/5/apple-iphone-6-800x800-imaeyny5fy253xy4.jpeg\"},\"maximumRetailPrice\":{\"amount\":62000.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":46493.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8ra6fzzme5sz?pid=MOBEYHZ2VRNZZ2J5&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":true,\"emiAvailable\":null,\"discountPercentage\":25.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Silver\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYHZ2VSVKHAZH, MOBEYHZ2VRNZZ2J5]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYGPZAHZQMCKZ, MOBEYHZ254METXXB, MOBEYHZ28FRMNDCW, MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG, MOBEYHZ2NUZGCHKN, MOBEYHZ2VSVKHAZH, MOBEYHZ2YAXZMF2J]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ2GY7HDHHG\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/h/h/g/apple-iphone-6-400x400-imaeyny5hqffnnbn.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/h/h/g/apple-iphone-6-200x200-imaeyny5hqffnnbn.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/h/h/g/apple-iphone-6-original-imaeyny5hqffnnbn.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/h/h/g/apple-iphone-6-800x800-imaeyny5hqffnnbn.jpeg\"},\"maximumRetailPrice\":{\"amount\":72000.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":59999.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8ra5z7yx5c9j?pid=MOBEYHZ2GY7HDHHG&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":false,\"emiAvailable\":null,\"discountPercentage\":16.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Silver\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYHZ254METXXB, MOBEYHZ2JHVFHFBG, MOBEYHZ2GY7HDHHG]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYGPZAHZQMCKZ, MOBEYHZ254METXXB, MOBEYHZ28FRMNDCW, MOBEYHZ2JHVFHFBG, MOBEYHZ2NUZGCHKN, MOBEYHZ2VRNZZ2J5, MOBEYHZ2VSVKHAZH, MOBEYHZ2YAXZMF2J]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ28ZYTRJYM\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6 Plus\",\"productDescription\":\"\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-400x400-imaeymdqartzwz76.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-200x200-imaeymdqartzwz76.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-original-imaeymdqartzwz76.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/m/q/k/apple-iphone-6-plus-800x800-imaeymdqartzwz76.jpeg\"},\"maximumRetailPrice\":{\"amount\":72000.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":65999.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6-plus/p/itme7zfybgjccnzu?pid=MOBEYHZ28ZYTRJYM&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":false,\"emiAvailable\":null,\"discountPercentage\":8.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Silver\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYHZ2XVMKU4QN, MOBEYHZ2Z8N6RDFE, MOBEYHZ28ZYTRJYM]\",\"colorVariants\":\"[MOBEFJG74WYMR4ZJ, MOBEFJG77J8DD6Z4, MOBEFJG77RWZQ4YJ, MOBEFJG7FS3CPHQZ, MOBEFJG7KHUB4S7Y, MOBEFJG7Q6AAUVGM, MOBEFJG7RZNK3YNV, MOBEFJG7YA8Y89JD, MOBEFJG7ZZUGGTT9, MOBEYGPZZV9GQWZZ, MOBEYHZ2JRQ6UVYF, MOBEYHZ2RVZHCMQK, MOBEYHZ2SSKPYGRK, MOBEYHZ2VXZM8HZD, MOBEYHZ2XVMKU4QN, MOBEYHZ2YBFZTV3S, MOBEYHZ2Z8N6RDFE]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ2NUZGCHKN\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"The bigger the better - the Apple iPhone 6 is an exemple of this phrase. The meticulously crafted iPhone 6 is truly an epitome of great taste and elegance. Beautiful Unibody Design Extremely thin, the iPhone 6 flaunts a seamless design with the smooth blend of anodised aluminium, stainless steel and the curved, polished glass. Incredibly light, the beautifully crafted iPhone 6 feels great in your hands. Thanks to its innovative design, the iPhone 6 provides an intuitive experience and is extremely easy to use. Brilliant Display Featuring the thinnest and most advanced Multi-Touch display ever made, the Apple iPhone 6 promises a high-contrast output with incredible colors and brightness on its 4.7 inch Retina HD display. A resolution of 1334x750 pixels, clear wide-angle viewing and an improved polariser - the iPhone 6 truly offers a bigger and better display. Power-Packed Performance Thanks to the all-new A8 processor with 64-bit architecture and an advanced 20 nanometre process, the iPhone 6 delivers an incredibly powerful performance while being extremely efficient. Get up to 50x faster CPU performance and up to 84x faster GPU performance with the iPhone 6. M8 Motion Coprocessor & Sensors Improve your iPhone's power efficiency with the M8 Motion Coprocessor that continuously measures data from your iPhone's different sensors such as accelerometer, compass, gyroscope and the new barometer. Camera Photos or videos - there is nothing that can beat the iPhone 6's iSight camera. The iPhone 6's 8 MP iSight camera gets new features such as a new sensor with Focus Pixels, improved face detection and exposure control. Also, now you can take amazing 1080p HD videos with the world's most popular camera. Security Make life easier with the iPhone 6's breakthrough Touch ID technology. Now you can securely access your phone with your fingerprint - no more worries about forgetting your pass code ever again. Moreover, the iPhone 6 lets you use your fingerprint to securely make purchases on iTunes or the App Store. Operating System The iPhone 6 comes with the biggest iOS release ever - the iOS 8. Featuring new capabilities and features, the world's advanced mobile operating system - the iOS 8 - gives you an incredible experience on your iPhone 6. Connectivity Thanks to the advanced Wi-Fi support with fast wireless performance, you can keep up with the world around you easily. Moreover, the iPhone 6 comes with Bluetooth and 3G support. Battery Take advantage of all the features of your highly efficient Apple iPhone 6 which boasts of an amazing battery life with up to 14 hours of 3G talk time and up to 250 hours of standby.\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-400x400-imaeyny5agaysfqg.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-200x200-imaeyny5agaysfqg.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-original-imaeyny5agaysfqg.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/h/k/n/apple-iphone-6-800x800-imaeyny5agaysfqg.jpeg\"},\"maximumRetailPrice\":{\"amount\":53500.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":33499.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8dvfeuxxbm4r?pid=MOBEYHZ2NUZGCHKN&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":true,\"emiAvailable\":null,\"discountPercentage\":37.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Silver\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYGPZAHZQMCKZ, MOBEYHZ2YAXZMF2J, MOBEYHZ2NUZGCHKN]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYGPZAHZQMCKZ, MOBEYHZ254METXXB, MOBEYHZ28FRMNDCW, MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG, MOBEYHZ2VRNZZ2J5, MOBEYHZ2VSVKHAZH, MOBEYHZ2YAXZMF2J]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null},{\"productBaseInfo\":{\"productIdentifier\":{\"productId\":\"MOBEYHZ2YAXZMF2J\",\"categoryPaths\":{\"categoryPath\":[[{\"title\":\"Mobiles>Handsets\"}]]}},\"productAttributes\":{\"title\":\"Apple iPhone 6\",\"productDescription\":\"The bigger the better - the Apple iPhone 6 is an exemplary of this phrase. The meticulously crafted iPhone 6 is truly an epitome of great taste and elegance. Beautiful Unibody Design Extremely thin, the iPhone 6 flaunts a seamless design with the smooth blend of anodised aluminium, stainless steel and the curved, polished glass. Incredibly light, the beautifully crafted iPhone 6 feels great in your hands. Thanks to its innovative design, the iPhone 6 provides an intuitive experience and is extremely easy to use. Brilliant Display Featuring the thinnest and most advanced Multi-Touch display ever made, the Apple iPhone 6 promises a high-contrast output with incredible colors and brightness on its 4.7 inch Retina HD display. A resolution of 1334 x 750 pixels, clear wide-angle viewing and an improved polariser - the iPhone 6 truly offers a bigger and better display. Power-Packed Performance Thanks to the all-new A8 processor with 64-bit architecture and an advanced 20 nanometre process, the iPhone 6 delivers an incredibly powerful performance while being extremely efficient. Get up to 50x faster CPU performance and up to 84x faster GPU performance with the iPhone 6. M8 Motion Coprocessor & Sensors Improve your iPhone's power efficiency with the M8 Motion Coprocessor that continuously measures data from your iPhone's different sensors such as accelerometer, compass, gyroscope and the new barometer. Camera Photos or videos - there is nothing that can beat the iPhone 6's iSight camera. The iPhone 6's 8 MP iSight camera gets new features such as a new sensor with Focus Pixels, improved face detection and exposure control. Also, now you can take amazing 1080p HD videos with the world's most popular camera. Security Make life easier with the iPhone 6's breakthrough Touch ID technology. Now you can securely access your phone with your fingerprint - no more worries about forgetting your pass code ever again. Moreover, the iPhone 6 lets you use your fingerprint to securely make purchases on iTunes or the App Store. Operating System The iPhone 6 comes with the biggest iOS release ever - the iOS 8. Featuring new capabilities and features, the world's advanced mobile operating system - the iOS 8 - gives you an incredible experience on your iPhone 6. Connectivity Thanks to the advanced Wi-Fi support with fast wireless performance, you can keep up with the world around you easily. Moreover, the iPhone 6 comes with Bluetooth and 3G support. Battery Take advantage of all the features of your highly efficient Apple iPhone 6 which boasts of an amazing battery life with up to 14 hours of 3G talk time and up to 250 hours of standby.\",\"imageUrls\":{\"400x400\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-400x400-imaeymdqs5gm5xkz.jpeg\",\"200x200\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-200x200-imaeymdqs5gm5xkz.jpeg\",\"unknown\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-original-imaeymdqs5gm5xkz.jpeg\",\"800x800\":\"http://img.fkcdn.com/image/mobile/f/2/j/apple-iphone-6-800x800-imaeymdqs5gm5xkz.jpeg\"},\"maximumRetailPrice\":{\"amount\":53500.0,\"currency\":\"INR\"},\"sellingPrice\":{\"amount\":33999.0,\"currency\":\"INR\"},\"productUrl\":\"http://dl.flipkart.com/dl/apple-iphone-6/p/itme8dvfeuxxbm4r?pid=MOBEYHZ2YAXZMF2J&affid=shariffaz\",\"productBrand\":\"Apple\",\"inStock\":true,\"isAvailable\":true,\"codAvailable\":true,\"emiAvailable\":null,\"discountPercentage\":36.0,\"cashBack\":null,\"offers\":[],\"size\":null,\"color\":\"Space Grey\",\"sizeUnit\":\"\",\"sizeVariants\":\"[MOBEYGPZAHZQMCKZ, MOBEYHZ2NUZGCHKN, MOBEYHZ2YAXZMF2J]\",\"colorVariants\":\"[MOBE4RW7WR5TWYQA, MOBEC894XYJZCNGR, MOBEFJG765FHFZJY, MOBEFJG7EKGHZEMN, MOBEFJG7FDGGMUZB, MOBEFJG7HWVD7AQG, MOBEFJG7MWPYV5DH, MOBEFJG7UDHGWBFJ, MOBEFJG7VKGJMZ5W, MOBEFJG7WZU9DZ8Y, MOBEYGPZAHZQMCKZ, MOBEYHZ254METXXB, MOBEYHZ28FRMNDCW, MOBEYHZ2GY7HDHHG, MOBEYHZ2JHVFHFBG, MOBEYHZ2NUZGCHKN, MOBEYHZ2VRNZZ2J5, MOBEYHZ2VSVKHAZH]\",\"styleCode\":null}},\"productShippingBaseInfo\":{\"shippingOptions\":null},\"offset\":null}]}";
+    ArrayList<ItemContent> array = new ArrayList<ItemContent>();
+    Button enter;
+    EditText search;
+    ProgressBar progressBar;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        MyCustomBaseAdapter adapter = new MyCustomBaseAdapter(this, array);
+        list = (ListView) findViewById(R.id.list_view_product);
+        search = (EditText) findViewById(R.id.search_text);
+        enter = (Button) findViewById(R.id.button);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        list.setAdapter(adapter);
+        final String[] searchString = new String[1];
+        enter.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                searchString[0] = search.getText().toString();
+                Context context = getApplicationContext();
+
+                int duration = Toast.LENGTH_SHORT;
+                String[] temp = search.getText().toString().split(" ");
+
+                searchString[0]=temp[0];
+                for(int i=1;i < temp.length;i++)
+                {
+                    searchString[0].concat("+");
+                    searchString[0].concat(temp[i]);
+                }
+                new AsyncTask<Void, Void, Void>(){
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        array.clear();
+                        String jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/flipkart.php?query=" + searchString[0]);
+                        try {
+                            getDataFromJson(jsonStr1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                }.execute();
+            }
+        });
+
+//        try {
+//            getDataFromJson(jsonStr);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                Object o = list.getItemAtPosition(position);
+                Intent ourIntent;
+                ItemContent fullObject = (ItemContent) o;
+                Context context = getApplicationContext();
+                Toast.makeText(context, "You have chosen: " + " " + fullObject.getTitle(), Toast.LENGTH_LONG).show();
+//                ourIntent = new Intent(MainActivity.this, ProductView.class);
+//                ourIntent.putExtra("product", fullObject);
+
+            }
+        });
+
 
     }
+    String fetch(String addr){
+        StringBuilder sb = new StringBuilder();
 
+        try{
+            URL url = new URL(addr);
 
-    public class SearchProduct extends Fragment{
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            InputStream is = con.getInputStream();
+            DataInputStream dis = new DataInputStream(is);
 
-        private ArrayAdapter<String> searchProducts;
-        String searchString;
-        Button enter;
-        EditText search;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            setHasOptionsMenu(true);
-            search = (EditText) findViewById(R.id.search_text);
-            enter = (Button) findViewById(R.id.button);
-
-            enter.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Perform action on click
-                    searchString = search.getText().toString();
-                    Context context = getApplicationContext();
-
-                    int duration = Toast.LENGTH_SHORT;
-
-                    Toast toast = Toast.makeText(context, searchString, duration);
-                    toast.show();
-                }
-            });
-
-        }
-
-
-        @Override
-        public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            inflater.inflate(R.menu.menu_main, menu);
-//        return true;
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
-
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_settings) {
-                return true;
+            String txt;
+            txt = dis.readLine();
+            sb.append(txt);
+            while(txt != null){
+                Log.d("A", txt);
+                txt = dis.readLine();
+                sb.append(txt);
             }
 
-            return super.onOptionsItemSelected(item);
+        }
+        catch (Exception e){
+            Log.e("Error connection", e.getMessage());
         }
 
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            // Create some dummy data for the ListView.  Here's a sample weekly forecast
-            String[] data = {
-                    "Pants",
-                    "Shirts",
-                    "Mobile phones",
-                    "Laptops",
-                    "Dresses",
-                    "Electronics",
-                    "Whatever"
-            };
-            List<String> productForecast = new ArrayList<String>(Arrays.asList(data));
-
-            // Now that we have some dummy forecast data, create an ArrayAdapter.
-            // The ArrayAdapter will take data from a source (like our dummy forecast) and
-            // use it to populate the ListView it's attached to.
-            searchProducts =
-                    new ArrayAdapter<String>(
-                            getActivity(), // The current context (this activity)
-                            R.layout.list_view_prroduct, // The name of the layout ID.
-                            R.id.list_item_product_textview, // The ID of the textview to populate.
-                            productForecast);
-
-            View rootView = inflater.inflate(R.layout.activity_main, container, false);
-
-            // Get a reference to the ListView, and attach this adapter to it.
-            ListView listView = (ListView) rootView.findViewById(R.id.list_view_product);
-            listView.setAdapter(searchProducts);
-
-            return rootView;
-        }
-
-//        public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
-//
-//            private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
-//
-//            /* The date/time conversion code is going to be moved outside the asynctask later,
-//             * so for convenience we're breaking it out into its own method now.
-//             */
-//            private String getReadableDateString(long time){
-//                // Because the API returns a unix timestamp (measured in seconds),
-//                // it must be converted to milliseconds in order to be converted to valid date.
-//                SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
-//                return shortenedDateFormat.format(time);
-//            }
-//
-//            /**
-//             * Prepare the weather high/lows for presentation.
-//             */
-//            private String formatHighLows(double high, double low) {
-//                // For presentation, assume the user doesn't care about tenths of a degree.
-//                long roundedHigh = Math.round(high);
-//                long roundedLow = Math.round(low);
-//
-//                String highLowStr = roundedHigh + "/" + roundedLow;
-//                return highLowStr;
-//            }
-//
-//            /**
-//             * Take the String representing the complete forecast in JSON Format and
-//             * pull out the data we need to construct the Strings needed for the wireframes.
-//             *
-//             * Fortunately parsing is easy:  constructor takes the JSON string and converts it
-//             * into an Object hierarchy for us.
-//             */
-//            private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
-//                    throws JSONException {
-//
-//                // These are the names of the JSON objects that need to be extracted.
-//                final String OWM_LIST = "list";
-//                final String OWM_WEATHER = "weather";
-//                final String OWM_TEMPERATURE = "temp";
-//                final String OWM_MAX = "max";
-//                final String OWM_MIN = "min";
-//                final String OWM_DESCRIPTION = "main";
-//
-//                JSONObject forecastJson = new JSONObject(forecastJsonStr);
-//                JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
-//
-//                // OWM returns daily forecasts based upon the local time of the city that is being
-//                // asked for, which means that we need to know the GMT offset to translate this data
-//                // properly.
-//
-//                // Since this data is also sent in-order and the first day is always the
-//                // current day, we're going to take advantage of that to get a nice
-//                // normalized UTC date for all of our weather.
-//
-//                Time dayTime = new Time();
-//                dayTime.setToNow();
-//
-//                // we start at the day returned by local time. Otherwise this is a mess.
-//                int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
-//
-//                // now we work exclusively in UTC
-//                dayTime = new Time();
-//
-//                String[] resultStrs = new String[numDays];
-//                for(int i = 0; i < weatherArray.length(); i++) {
-//                    // For now, using the format "Day, description, hi/low"
-//                    String day;
-//                    String description;
-//                    String highAndLow;
-//
-//                    // Get the JSON object representing the day
-//                    JSONObject dayForecast = weatherArray.getJSONObject(i);
-//
-//                    // The date/time is returned as a long.  We need to convert that
-//                    // into something human-readable, since most people won't read "1400356800" as
-//                    // "this saturday".
-//                    long dateTime;
-//                    // Cheating to convert this to UTC time, which is what we want anyhow
-//                    dateTime = dayTime.setJulianDay(julianStartDay+i);
-//                    day = getReadableDateString(dateTime);
-//
-//                    // description is in a child array called "weather", which is 1 element long.
-//                    JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-//                    description = weatherObject.getString(OWM_DESCRIPTION);
-//
-//                    // Temperatures are in a child object called "temp".  Try not to name variables
-//                    // "temp" when working with temperature.  It confuses everybody.
-//                    JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
-//                    double high = temperatureObject.getDouble(OWM_MAX);
-//                    double low = temperatureObject.getDouble(OWM_MIN);
-//
-//                    highAndLow = formatHighLows(high, low);
-//                    resultStrs[i] = day + " - " + description + " - " + highAndLow;
-//                }
-//                return resultStrs;
-//
-//            }
-//            @Override
-//            protected String[] doInBackground(String... params) {
-//
-//                // If there's no zip code, there's nothing to look up.  Verify size of params.
-//                if (params.length == 0) {
-//                    return null;
-//                }
-//
-//                // These two need to be declared outside the try/catch
-//                // so that they can be closed in the finally block.
-//                HttpURLConnection urlConnection = null;
-//                BufferedReader reader = null;
-//
-//                // Will contain the raw JSON response as a string.
-//                String forecastJsonStr = null;
-//
-//                String format = "json";
-//                String units = "metric";
-//                int numDays = 7;
-//
-//                try {
-//                    // Construct the URL for the OpenWeatherMap query
-//                    // Possible parameters are avaiable at OWM's forecast API page, at
-//                    // http://openweathermap.org/API#forecast
-//                    final String FORECAST_BASE_URL =
-//                            "http://api.openweathermap.org/data/2.5/forecast/daily?";
-//                    final String QUERY_PARAM = "q";
-//                    final String FORMAT_PARAM = "mode";
-//                    final String UNITS_PARAM = "units";
-//                    final String DAYS_PARAM = "cnt";
-//                    final String APPID_PARAM = "APPID";
-//
-//                    Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-//                            .appendQueryParameter(QUERY_PARAM, params[0])
-//                            .appendQueryParameter(FORMAT_PARAM, format)
-//                            .appendQueryParameter(UNITS_PARAM, units)
-//                            .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
-//                            .appendQueryParameter(APPID_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY)
-//                            .build();
-//
-//                    URL url = new URL(builtUri.toString());
-//
-//                    // Create the request to OpenWeatherMap, and open the connection
-//                    urlConnection = (HttpURLConnection) url.openConnection();
-//                    urlConnection.setRequestMethod("GET");
-//                    urlConnection.connect();
-//
-//                    // Read the input stream into a String
-//                    InputStream inputStream = urlConnection.getInputStream();
-//                    StringBuffer buffer = new StringBuffer();
-//                    if (inputStream == null) {
-//                        // Nothing to do.
-//                        return null;
-//                    }
-//                    reader = new BufferedReader(new InputStreamReader(inputStream));
-//
-//                    String line;
-//                    while ((line = reader.readLine()) != null) {
-//                        // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-//                        // But it does make debugging a *lot* easier if you print out the completed
-//                        // buffer for debugging.
-//                        buffer.append(line + "\n");
-//                    }
-//
-//                    if (buffer.length() == 0) {
-//                        // Stream was empty.  No point in parsing.
-//                        return null;
-//                    }
-//                    forecastJsonStr = buffer.toString();
-//                } catch (IOException e) {
-//                    Log.e(LOG_TAG, "Error ", e);
-//                    // If the code didn't successfully get the weather data, there's no point in attemping
-//                    // to parse it.
-//                    return null;
-//                } finally {
-//                    if (urlConnection != null) {
-//                        urlConnection.disconnect();
-//                    }
-//                    if (reader != null) {
-//                        try {
-//                            reader.close();
-//                        } catch (final IOException e) {
-//                            Log.e(LOG_TAG, "Error closing stream", e);
-//                        }
-//                    }
-//                }
-//
-//                try {
-//                    return getWeatherDataFromJson(forecastJsonStr, numDays);
-//                } catch (JSONException e) {
-//                    Log.e(LOG_TAG, e.getMessage(), e);
-//                    e.printStackTrace();
-//                }
-//
-//                // This will only happen if there was an error getting or parsing the forecast.
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String[] result) {
-//                if (result != null) {
-//                    searchProducts.clear();
-//                    for(String dayForecastStr : result) {
-//                        searchProducts.add(dayForecastStr);
-//                    }
-//                    // New data is back from the server.  Hooray!
-//                }
-//            }
-//        }
-//    }
-
+        return sb.toString();
     }
+
+    private void getDataFromJson(String forecastJsonStr)
+            throws JSONException {
+        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        JSONArray weatherArray = forecastJson.getJSONArray("productInfoList");
+
+
+        for (int i = 0; i < weatherArray.length(); i++) {
+
+            JSONObject productObject = weatherArray.getJSONObject(i);
+            ItemContent it = new ItemContent();
+            it.setTitle(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getString("title"));
+            it.setImgid(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("imageUrls").getString("200x200"));
+            it.setDescription(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getString("title"));
+            array.add(it);
+        }
+        return;
+    }
+
+
 }
