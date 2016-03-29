@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -47,12 +48,12 @@ import java.util.List;
  * Created by Harrispaul on 3/14/2016.
  */
 
-public class MainActivity  extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity  extends Activity implements AdapterView.OnItemSelectedListener {
 
     ListView list;
     String jsonStr;
     ArrayList<ItemContent> array = new ArrayList<ItemContent>();
-    Button enter;
+    ImageButton enter;
     EditText search;
     ProgressBar progressBar;
     MyCustomBaseAdapter adapter;
@@ -87,7 +88,7 @@ public class MainActivity  extends AppCompatActivity implements AdapterView.OnIt
 
         search = (EditText) findViewById(R.id.search_text);
 
-        enter = (Button) findViewById(R.id.button);
+        enter = (ImageButton) findViewById(R.id.button);
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
