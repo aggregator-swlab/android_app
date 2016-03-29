@@ -2,6 +2,8 @@ package com.example.harrispaul.aggregator;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,49 +11,51 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.URL;
 
-import static android.widget.Toast.makeText;
-
 /**
- * Created by Harrispaul on 3/25/2016.
+ * Created by Harrispaul on 3/28/2016.
  */
+public class ProductContent extends Activity {
 
-public class LoadImage extends Activity {
-    Button load_img;
     ImageView img;
     Bitmap bitmap;
-    ProgressDialog pDialog;
+    ProgressBar pDialog;
+    Object o;
+    ItemContent o1 = (ItemContent) o;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.image_load);
-        load_img = (Button)findViewById(R.id.load);
-        img = (ImageView)findViewById(R.id.img);
-        load_img.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.content_product);
+        pDialog = (ProgressBar) findViewById(R.id.progressBar2);
+        img = (ImageView) findViewById(R.id.icon2);
+        o = getIntent().getSerializableExtra("product");
+        o1 = (ItemContent)o;
+        new LoadImage().execute(o1.getImgid());
 
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                new LoadImage1().execute("https://www.hallaminternet.com/assets/URL-tagging-image.png");
-            }
-        });
 
 
     }
-    private class LoadImage1 extends AsyncTask<String, String, Bitmap> {
+
+    private class LoadImage extends AsyncTask<String, String, Bitmap> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(LoadImage.this);
-            pDialog.setMessage("Loading Image ....");
-            pDialog.show();
+            Context context = getApplicationContext();
+            pDialog = new ProgressBar(context);
+//            pDialog.setMessage("Loading Image ....");
+//            pDialog.show();
 
         }
+
         protected Bitmap doInBackground(String... args) {
             try {
                 bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
@@ -64,14 +68,14 @@ public class LoadImage extends Activity {
 
         protected void onPostExecute(Bitmap image) {
 
-            if(image != null){
+            if (image != null) {
                 img.setImageBitmap(image);
-                pDialog.dismiss();
+//                pDialog.dismiss();
 
-            }else{
+            } else {
 
-                pDialog.dismiss();
-                makeText(LoadImage.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
+//                pDialog.dismiss();
+//                Toast.makeText(LoadImage.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
 
             }
         }

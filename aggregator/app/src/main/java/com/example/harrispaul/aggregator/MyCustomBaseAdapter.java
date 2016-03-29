@@ -103,6 +103,7 @@ public class MyCustomBaseAdapter extends BaseAdapter {
                 bmImage.setImageBitmap(image);
 
             }
+
         }
     }
 }
