@@ -57,7 +57,7 @@
                 android:layout_marginLeft="105dp">
                 <EditText
                     android:id="@+id/search_text"
-                    android:layout_width="250dp"
+                    android:layout_width="220dp"
                     android:hint="search a product...."
                     android:textColor="#FFFFFF"
                     android:textColorHint="#FFFFFF"
@@ -66,7 +66,7 @@
                     android:id="@+id/button"
                     android:layout_width="30dp"
                     android:layout_height="35dp"
-                    android:layout_marginRight="10dp"
+
                     android:src="@drawable/ic_launcher"
                     style="?android:attr/borderlessButtonStyle"/>
             </LinearLayout>

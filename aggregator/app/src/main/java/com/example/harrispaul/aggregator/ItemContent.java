@@ -11,19 +11,36 @@ public class ItemContent implements Serializable {
     private String title = "";
     private String imgid = "";
     private String description = "";
-    private double price = .0;
-
-    public void setPrice(String price ) {
-        this.price =Double.parseDouble(price);
-        Log.i("price","price is" + this.price);
+    private String Maxprice = "";
+    private String Sellingprice = "";
+    private String id="";
+    public void setId (String id) {
+        this.id = id;
     }
 
-    public double getPrice() {
-        return price;
+    public String getId() {
+        return id;
+    }
+    public void setSellingPrice(String price ) {
+        this.Sellingprice =price;
+        Log.i("price","price is" + this.Sellingprice);
+    }
+
+    public String getSellingPrice() {
+        return Sellingprice;
+    }
+    public void setMaxPrice(String price ) {
+        this.Maxprice =price;
+        Log.i("price","price is" + this.Maxprice);
+    }
+
+    public String getmaxPrice() {
+        return Maxprice;
     }
     public void setTitle(String title) {
         this.title = title;
     }
+
 
     public String getTitle() {
         return title;

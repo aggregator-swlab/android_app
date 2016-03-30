@@ -218,7 +218,10 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
             it.setTitle(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getString("title"));
             it.setImgid(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("imageUrls").getString("200x200"));
             it.setDescription(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getString("title"));
-            it.setPrice(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("maximumRetailPrice").getString("amount"));
+            it.setMaxPrice(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("maximumRetailPrice").getString("amount"));
+            it.setSellingPrice(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("sellingPrice").getString("amount"));
+            it.setId(productObject.getJSONObject("productBaseInfo").getJSONObject("productIdentifier").getString("productId"));
+            Log.i("id",it.getId() + "hkdshahkds" + i);
             array.add(it);
         }
 

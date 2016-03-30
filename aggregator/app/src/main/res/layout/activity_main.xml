@@ -6,66 +6,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <include layout="@layout/header_footer"/>
+
+    <include layout="@layout/header_footer" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginTop="100dp"
         android:orientation="vertical">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-
-        tools:context=".MainActivity$PlaceholderFragment"
-        tools:ignore="MergeRootFrame">
-        <RelativeLayout
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            >
-            <Spinner
-                android:id="@+id/sort"
-                android:layout_width="150dp"
+
+            tools:context=".MainActivity$PlaceholderFragment"
+            tools:ignore="MergeRootFrame">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+                <Spinner
+                    android:id="@+id/sort"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true" />
+
+                <Spinner
+                    android:id="@+id/filter"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/container2"
+            android:layout_width="match_parent"
+            android:layout_height="375dp"
+            tools:context=".MainActivity">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <Spinner
-                android:layout_alignParentRight="true"
-                android:id="@+id/filter"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/container2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone" />
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true"
+                android:visibility="gone" />
 
 
-        <ListView
-            android:id="@+id/list_view_product"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal|top"></ListView>
+            <ListView
+                android:id="@+id/list_view_product"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal|top"/>
 
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
-    </FrameLayout>
+        </FrameLayout>
     </LinearLayout>
 
 </RelativeLayout>
