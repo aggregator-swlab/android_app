@@ -15,6 +15,8 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Harrispaul on 3/30/2016.
@@ -58,7 +60,11 @@ public class SingleProductCustomBaseAdapter extends BaseAdapter{
         holder.txtName.setText(searchArrayList.get(position).getTitle());
         holder.description.setText(searchArrayList.get(position).getDescription());
         holder.price.setText("Price is " + searchArrayList.get(position).getmaxPrice());
-        new LoadImage(img).execute(searchArrayList.get(position).getImgid());
+        Bitmap bitmap;
+
+        ImageId recv = new DownloadImageTask().getBitmap(searchArrayList.get(position).getImgid(),position);
+        bitmap=recv.getBm(position);
+        img.setImageBitmap(bitmap);
         return convertView;
     }
 
@@ -67,41 +73,5 @@ public class SingleProductCustomBaseAdapter extends BaseAdapter{
         public TextView description;
         TextView price;
     }
-    private class LoadImage extends AsyncTask<String, String, Bitmap> {
 
-        ImageView bmImage;
-        ProgressDialog pDialog;
-        Bitmap bitmap;
-
-        public LoadImage(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        protected Bitmap doInBackground(String... args) {
-            try {
-                bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
-//                Context context = getApplicationContext();
-//                Toast.makeText(context, "You have chosen: " + " ", Toast.LENGTH_LONG).show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        protected void onPostExecute(Bitmap image) {
-
-            if (image != null) {
-                bmImage.setImageBitmap(image);
-
-            }
-
-        }
-    }
 }

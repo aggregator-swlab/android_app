@@ -55,6 +55,7 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
     ArrayList<ItemContent> array = new ArrayList<ItemContent>();
     ImageButton enter;
     EditText search;
+    Button deals;
     ProgressBar progressBar;
     MyCustomBaseAdapter adapter;
     /**
@@ -67,6 +68,7 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Spinner spinnerSort = (Spinner) findViewById(R.id.sort);
         ArrayAdapter<CharSequence> adapterSort = ArrayAdapter.createFromResource(this, R.array.sorts_array, android.R.layout.simple_spinner_item);
         adapterSort.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -79,6 +81,7 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
 
         spinnerFilter.setOnItemSelectedListener(this);
         spinnerSort.setOnItemSelectedListener(this);
+        deals = (Button) findViewById(R.id.deals);
 
 
 
@@ -179,6 +182,11 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
 
     }
 
+    public void dealIntent(View v){
+        Intent activityChangeIntent = new Intent(MainActivity.this, Deals.class);
+        MainActivity.this.startActivity(activityChangeIntent);
+    }
+
     String fetch(String addr) {
         StringBuilder sb = new StringBuilder();
 
@@ -217,7 +225,7 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
             ItemContent it = new ItemContent();
             it.setTitle(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getString("title"));
             it.setImgid(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("imageUrls").getString("200x200"));
-            it.setDescription(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getString("title"));
+            it.setDescription(productObject.getJSONObject("productBaseInfo").getJSONObject("productIdentifier").getJSONObject("categoryPaths").getJSONArray("categoryPath").getJSONArray(0).getJSONObject(0).getString("title"));
             it.setMaxPrice(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("maximumRetailPrice").getString("amount"));
             it.setSellingPrice(productObject.getJSONObject("productBaseInfo").getJSONObject("productAttributes").getJSONObject("sellingPrice").getString("amount"));
             it.setId(productObject.getJSONObject("productBaseInfo").getJSONObject("productIdentifier").getString("productId"));

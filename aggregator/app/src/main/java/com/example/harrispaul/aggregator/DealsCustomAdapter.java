@@ -1,34 +1,25 @@
 package com.example.harrispaul.aggregator;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by Harrispaul on 3/25/2016.
+ * Created by Harrispaul on 4/4/2016.
  */
-
-public class MyCustomBaseAdapter extends BaseAdapter {
-
+public class DealsCustomAdapter extends BaseAdapter{
     private static ArrayList<ItemContent> searchArrayList;
 
     private LayoutInflater mInflater;
 
-    public MyCustomBaseAdapter(Context context, ArrayList<ItemContent> results) {
+    public DealsCustomAdapter(Context context, ArrayList<ItemContent> results) {
         this.searchArrayList = results;
         mInflater = LayoutInflater.from(context);
     }
@@ -45,35 +36,34 @@ public class MyCustomBaseAdapter extends BaseAdapter {
     }
     public ImageView img;
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.i("i was called "," " + position);
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.mylist, null);
+            convertView = mInflater.inflate(R.layout.items_compared, null);
             holder = new ViewHolder();
-            holder.txtName = (TextView) convertView.findViewById(R.id.item);
-            holder.txtCityState = (TextView) convertView.findViewById(R.id.textView1);
-            img = (ImageView) convertView.findViewById(R.id.icon);
-
+            holder.txtName = (TextView) convertView.findViewById(R.id.itemName);
+            holder.price = (TextView) convertView.findViewById(R.id.price);
+            holder.description = (TextView) convertView.findViewById(R.id.description);
+            img = (ImageView) convertView.findViewById(R.id.itemIcon);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         holder.txtName.setText(searchArrayList.get(position).getTitle());
-        holder.txtCityState.setText(searchArrayList.get(position).getDescription());
+        holder.description.setText(searchArrayList.get(position).getDescription());
+        holder.price.setText(searchArrayList.get(position).getmaxPrice());
         Bitmap bitmap;
         ImageId recv = new DownloadImageTask().getBitmap(searchArrayList.get(position).getImgid(),position);
-        img.setImageBitmap(recv.getBm(position));
+        bitmap=recv.getBm(position);
+        img.setImageBitmap(bitmap);
         return convertView;
     }
 
     static class ViewHolder {
         TextView txtName;
-        TextView txtCityState;
+        public TextView description;
+        TextView price;
     }
-
-
-
 
 }

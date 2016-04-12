@@ -24,7 +24,7 @@ public class LoadImage extends Activity {
     Button load_img;
     ImageView img;
     Bitmap bitmap;
-    ProgressDialog pDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +47,6 @@ public class LoadImage extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(LoadImage.this);
-            pDialog.setMessage("Loading Image ....");
-            pDialog.show();
-
         }
         protected Bitmap doInBackground(String... args) {
             try {
@@ -66,11 +62,11 @@ public class LoadImage extends Activity {
 
             if(image != null){
                 img.setImageBitmap(image);
-                pDialog.dismiss();
+//                pDialog.dismiss();
 
             }else{
 
-                pDialog.dismiss();
+//                pDialog.dismiss();
                 makeText(LoadImage.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
 
             }

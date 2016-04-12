@@ -27,28 +27,32 @@
                 android:orientation="horizontal"
                 android:layout_height="50dp">
                 <Button
+                    android:id="@+id/home"
                     android:layout_width="90dp"
                     android:layout_height="match_parent"
                     android:text = "HOME"
                     android:textAlignment="center"
+                    android:onClick="HomeIntent"
                     android:textColor="#FFFFFF"
                     android:background="?android:attr/selectableItemBackground"
                      />
                 <Button
+                    android:id="@+id/deals"
                     android:layout_width="90dp"
                     android:textAlignment="center"
                     android:background="?android:attr/selectableItemBackground"
                     android:layout_height="match_parent"
                     android:text="DEALS"
+                    android:onClick="dealIntent"
                     android:textColor="#FFFFFF"/>
 
                 <Button
+                    android:id="@+id/help"
                     android:layout_width="90dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:layout_height="match_parent"
                     android:text="HELP"
-                    android:textColor="#FFFFFF"
-                    android:id="@+id/button2" />
+                    android:textColor="#FFFFFF" />
 
             </LinearLayout>
             <LinearLayout

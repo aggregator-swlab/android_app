@@ -13,7 +13,7 @@ import java.io.IOException;
  * Created by Harrispaul on 3/14/2016.
  */
 public class Menu extends ListActivity {
-    String classes[] = { "Deals" , "Search" , "Exit" , "Settings" , "Links","Load"};
+    String classes[] = { "Deals" , "Search" , "Exit" , "Settings" , "Popuptest","Load"};
     public Intent ourIntent;
     public void onListItemClick(ListView l,View v,int position,long id) {
         super.onListItemClick(l, v, position, id);
@@ -32,6 +32,9 @@ public class Menu extends ListActivity {
                     break;
                 case "Load":
                     ourIntent = new Intent(Menu.this, LoadImage.class);
+                    break;
+                case "Popuptest":
+                    ourIntent = new Intent(Menu.this, TestPopupActivity.class);
                     break;
             }
             startActivity(ourIntent);

@@ -1,21 +1,17 @@
 package com.example.harrispaul.aggregator;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -31,29 +27,22 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by Harrispaul on 3/28/2016.
+ * Created by Harrispaul on 3/30/2016.
  */
-public class ProductContent extends Activity {
+public class Deals extends Activity {
 
     ListView list;
     String jsonStr;
     ArrayList<ItemContent> array = new ArrayList<ItemContent>();
     ImageButton enter;
     EditText search;
-    ProgressBar progressBar;
+//    ProgressBar progressBar;
     SingleProductCustomBaseAdapter adapter;
     Bitmap bitmap;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_product);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        Object o;
-        o = getIntent().getSerializableExtra("product");
-        final ItemContent o1 = (ItemContent) o;
-
         adapter = new SingleProductCustomBaseAdapter(this, array);
 
         list = (ListView) findViewById(R.id.single_product_list);
@@ -62,7 +51,7 @@ public class ProductContent extends Activity {
 
         enter = (ImageButton) findViewById(R.id.button);
 
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+//        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         list.setAdapter(adapter);
         new AsyncTask<Void, Void, ArrayList<ItemContent>>() {
@@ -71,24 +60,16 @@ public class ProductContent extends Activity {
             @Override
             protected ArrayList<ItemContent> doInBackground(Void... params) {
                 Log.v("before", "size of the array is" + array.size());
-                Log.i("id",o1.getId());
-                jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/compare.php?id=" + o1.getId());
 
-                jsonStr = jsonStr1.replace("<type 'str'>", "");
-                jsonStr = jsonStr.replace("null", "");
-                jsonStr = jsonStr.replace("u'", "\"");
-                jsonStr = jsonStr.replace("'", "\"");
-                jsonStr = jsonStr.replace("\\xc2\\xa0\\xc2\\xa0","");
-                jsonStr = jsonStr.replace("u\"", "\"");
-
-                Log.i("string",jsonStr);
+                jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/deals.php");
+                Log.i("string",jsonStr1);
                 try {
                     if (jsonStr1.length() == 0) {
                         Log.v("String", "zero lengthed string");
                         onBackPressed();
 
                     } else
-                        getDataFromJson(jsonStr);
+                        getDataFromJson(jsonStr1);
 //                        getDataFromJson(jsonStr1);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -177,18 +158,17 @@ public class ProductContent extends Activity {
 
     private void getDataFromJson(String FetchedJsonStr)
             throws JSONException {
-        JSONArray forecastJson = new JSONArray(FetchedJsonStr);
+        JSONObject forecastJson = new JSONObject(FetchedJsonStr);
+        JSONArray listWise = forecastJson.getJSONArray("dotdList");
 
+        for (int i = 0; i <listWise.length(); i++) {
 
-        for (int i = 0; i < forecastJson.length(); i++) {
-
-            JSONObject productObject = forecastJson.getJSONObject(i);
+            JSONObject productObject = listWise.getJSONObject(i);
             ItemContent it = new ItemContent();
-//            Log.i("xxx",productObject.getString("rating"));
             it.setTitle(productObject.getString("title"));
-            it.setImgid(productObject.getString("imgurl"));
-            it.setDescription(productObject.getString("server"));
-            it.setMaxPrice(productObject.getString("price"));
+            it.setImgid(productObject.getJSONArray("imageUrls").getJSONObject(2).getString("url"));
+            it.setDescription(productObject.getString("description"));
+            it.setMaxPrice(productObject.getString("title"));
             it.setId(productObject.getString("url"));
             array.add(it);
         }
@@ -199,3 +179,4 @@ public class ProductContent extends Activity {
 
 
 }
+
