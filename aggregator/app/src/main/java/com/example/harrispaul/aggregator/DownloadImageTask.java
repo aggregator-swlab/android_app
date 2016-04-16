@@ -26,7 +26,7 @@ class DownloadImageTask  {
     public Bitmap returnValue;
 
 
-    public ImageId getBitmap(String imgUrl,int position) {
+    public ImageId getBitmap(String imgUrl) {
         try {
             returnValue = new LoadImage().execute(imgUrl).get();
         } catch (InterruptedException e) {
@@ -34,7 +34,7 @@ class DownloadImageTask  {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        ImageId send = new ImageId(returnValue,position);
+        ImageId send = new ImageId(returnValue,imgUrl);
         return send;
     }
 

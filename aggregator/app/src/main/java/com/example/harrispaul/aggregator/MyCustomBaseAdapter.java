@@ -63,8 +63,12 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         holder.txtName.setText(searchArrayList.get(position).getTitle());
         holder.txtCityState.setText(searchArrayList.get(position).getDescription());
         Bitmap bitmap;
-        ImageId recv = new DownloadImageTask().getBitmap(searchArrayList.get(position).getImgid(),position);
-        img.setImageBitmap(recv.getBm(position));
+        String Url = searchArrayList.get(position).getImgid();
+        ImageId recv = new DownloadImageTask().getBitmap(Url);
+        if(recv.getId()==Url){
+            img.setImageBitmap(recv.getBm());
+        }
+        img.setImageBitmap(recv.getBm());
         return convertView;
     }
 

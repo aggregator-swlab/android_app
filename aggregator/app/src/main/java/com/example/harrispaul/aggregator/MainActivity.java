@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +26,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -42,22 +48,26 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by Harrispaul on 3/14/2016.
  */
 
-public class MainActivity  extends Activity implements AdapterView.OnItemSelectedListener {
+public class MainActivity  extends Activity  {
 
     ListView list;
     String jsonStr;
     ArrayList<ItemContent> array = new ArrayList<ItemContent>();
     ImageButton enter;
     EditText search;
-    Button deals;
+    Button deals,sort,filter;
     ProgressBar progressBar;
     MyCustomBaseAdapter adapter;
+    RadioButton common;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -68,24 +78,10 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Spinner spinnerSort = (Spinner) findViewById(R.id.sort);
-        ArrayAdapter<CharSequence> adapterSort = ArrayAdapter.createFromResource(this, R.array.sorts_array, android.R.layout.simple_spinner_item);
-        adapterSort.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSort.setAdapter(adapterSort);
-
-        Spinner spinnerFilter = (Spinner) findViewById(R.id.filter);
-        ArrayAdapter<CharSequence> adapterFilter = ArrayAdapter.createFromResource(this, R.array.filters_array, android.R.layout.simple_spinner_item);
-        adapterFilter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFilter.setAdapter(adapterFilter);
-
-        spinnerFilter.setOnItemSelectedListener(this);
-        spinnerSort.setOnItemSelectedListener(this);
         deals = (Button) findViewById(R.id.deals);
-
-
-
         adapter = new MyCustomBaseAdapter(this, array);
+        sort = (Button) findViewById(R.id.sort);
+        filter = (Button) findViewById(R.id.filter);
 
         list = (ListView) findViewById(R.id.list_view_product);
 
@@ -117,22 +113,22 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
                 Toast.makeText(context, searchString[0], Toast.LENGTH_SHORT).show();
                 new AsyncTask<Void, Void, ArrayList<ItemContent>>() {
                     String jsonStr1;
+
                     @Override
                     protected ArrayList<ItemContent> doInBackground(Void... params) {
-                        Log.v("before","size of the array is" + array.size());
+                        Log.v("before", "size of the array is" + array.size());
                         array.clear();
                         Log.v("middle", "size of the array is" + array.size());
                         jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/flipkart.php?query=" + searchString[0]);
                         try {
                             if (jsonStr1.length() == 0) {
                                 Log.v("String", "zero lengthed string");
-                            }
-                            else
+                            } else
                                 getDataFromJson(jsonStr1);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.v("final","size of the array is" + array.size());
+                        Log.v("final", "size of the array is" + array.size());
                         return array;
                     }
 
@@ -179,7 +175,14 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
             }
         });
 
+        sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
 
+                //Open popup window
+                showPopup(MainActivity.this);
+            }
+        });
     }
 
     public void dealIntent(View v){
@@ -235,24 +238,92 @@ public class MainActivity  extends Activity implements AdapterView.OnItemSelecte
 
         return;
     }
+    public static Comparator<ItemContent> StringAscComparator = new Comparator<ItemContent>() {
 
+        public int compare(ItemContent app1, ItemContent app2) {
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this,"haii there",Toast.LENGTH_SHORT);
-        switch(parent.getItemAtPosition(position).toString()) {
-            case "Price-Ascending":
-                array.clear();
-                break;
-
+            float price1 = Float.parseFloat(app1.getSellingPrice());
+            float price2 = Float.parseFloat(app2.getSellingPrice());
+            if(price1 > price2){
+                return 1;
+            } else {
+                return -1;
+            }
         }
-            //price ascending;
+    };
+    public static Comparator<ItemContent> StringDescComparator = new Comparator<ItemContent>() {
+
+        public int compare(ItemContent app1, ItemContent app2) {
+
+            float price1 = Float.parseFloat(app1.getSellingPrice());
+            float price2 = Float.parseFloat(app2.getSellingPrice());
+            if (price2 > price1) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    };
 
 
-    }
+    private void showPopup(final Activity context) {
+        // Inflate the popup_layout.xml
+        LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
+        LayoutInflater layoutInflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.popup, viewGroup);
+        RadioButton lth,htl;
+        lth = (RadioButton) layout.findViewById(R.id.lth);
+        htl = (RadioButton) layout.findViewById(R.id.htl);
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
 
+        // Creating the PopupWindow
+        final PopupWindow popup = new PopupWindow(context);
+        popup.setContentView(layout);
+        popup.setHeight(400);
+        popup.setWidth(600);
+        popup.setFocusable(true);
+
+        // Some offset to align the popup a bit to the right, and a bit down, relative to button's position.
+
+
+        // Clear the default translucent background
+        popup.setBackgroundDrawable(new BitmapDrawable());
+
+        // Displaying the popup at the specified location, + offsets.
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 80, 400);
+
+        // Getting a reference to Close button, and close the popup when clicked.
+        Button close = (Button) layout.findViewById(R.id.close);
+        lth.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Collections.sort(array, StringAscComparator);
+                for(int i=0;i<10;i++){
+                    String j= array.get(i).getSellingPrice();
+                    Log.i("price of "+ i ,"=" + j);
+                }
+
+                adapter.notifyDataSetChanged();
+
+             }
+        });
+        htl.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Collections.sort(array, StringDescComparator);
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
     }
 }

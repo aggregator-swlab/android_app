@@ -53,10 +53,12 @@ public class DealsCustomAdapter extends BaseAdapter{
         holder.txtName.setText(searchArrayList.get(position).getTitle());
         holder.description.setText(searchArrayList.get(position).getDescription());
         holder.price.setText(searchArrayList.get(position).getmaxPrice());
-        Bitmap bitmap;
-        ImageId recv = new DownloadImageTask().getBitmap(searchArrayList.get(position).getImgid(),position);
-        bitmap=recv.getBm(position);
-        img.setImageBitmap(bitmap);
+        String Url = searchArrayList.get(position).getImgid();
+        ImageId recv = new DownloadImageTask().getBitmap(Url);
+        if(recv.getId()==Url){
+            img.setImageBitmap(recv.getBm());
+        }
+        img.setImageBitmap(recv.getBm());
         return convertView;
     }
 

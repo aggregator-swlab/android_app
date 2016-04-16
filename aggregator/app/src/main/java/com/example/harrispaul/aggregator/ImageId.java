@@ -7,12 +7,17 @@ import android.graphics.Bitmap;
  */
 public class ImageId {
     private Bitmap bitmap;
-    private Integer position;
-    public ImageId(Bitmap bm,Integer id){
+    private String position;
+    public ImageId(Bitmap bm,String id){
         this.bitmap=bm;
         this.position=id;
     }
-    public Bitmap getBm(Integer id){
+
+    public String getId(){
+        return position;
+    }
+    public Bitmap getBm(){
         return bitmap;
     }
+
 }
