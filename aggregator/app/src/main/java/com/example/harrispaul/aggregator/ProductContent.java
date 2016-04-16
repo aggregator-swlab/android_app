@@ -60,8 +60,6 @@ public class ProductContent extends Activity {
 
         search = (EditText) findViewById(R.id.search_text);
 
-        enter = (ImageButton) findViewById(R.id.button);
-
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         list.setAdapter(adapter);
@@ -108,27 +106,7 @@ public class ProductContent extends Activity {
 
         }.execute();
         final String[] searchString = new String[1];
-        enter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                searchString[0] = search.getText().toString();
-                Context context = getApplicationContext();
 
-                int duration = Toast.LENGTH_SHORT;
-                String[] temp = search.getText().toString().split(" ");
-
-                searchString[0] = temp[0];
-                for (int i = 1; i < temp.length; i++) {
-                    searchString[0] += "+" + temp[i];
-                }
-
-
-//                Context context = getApplicationContext();
-                Toast.makeText(context, searchString[0], Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

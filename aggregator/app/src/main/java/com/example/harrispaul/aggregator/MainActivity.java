@@ -16,11 +16,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,6 +34,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -61,18 +64,10 @@ public class MainActivity  extends Activity  {
     ListView list;
     String jsonStr;
     ArrayList<ItemContent> array = new ArrayList<ItemContent>();
-    ImageButton enter;
     EditText search;
     Button deals,sort,filter;
     ProgressBar progressBar;
     MyCustomBaseAdapter adapter;
-    RadioButton common;
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,65 +81,73 @@ public class MainActivity  extends Activity  {
         list = (ListView) findViewById(R.id.list_view_product);
 
         search = (EditText) findViewById(R.id.search_text);
+        sort.setVisibility(View.GONE);
+        filter.setVisibility(View.GONE);
 
-        enter = (ImageButton) findViewById(R.id.button);
+
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         list.setAdapter(adapter);
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
-        final String[] searchString = new String[1];
-        enter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                searchString[0] = search.getText().toString();
-                Context context = getApplicationContext();
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    final String[] searchString = new String[1];
+                    searchString[0] = search.getText().toString();
+                    Context context = getApplicationContext();
 
-                int duration = Toast.LENGTH_SHORT;
-                String[] temp = search.getText().toString().split(" ");
+                    int duration = Toast.LENGTH_SHORT;
+                    String[] temp = search.getText().toString().split(" ");
 
-                searchString[0] = temp[0];
-                for (int i = 1; i < temp.length; i++) {
-                    searchString[0] += "+" + temp[i];
-                }
+                    searchString[0] = temp[0];
+                    for (int i = 1; i < temp.length; i++) {
+                        searchString[0] += "+" + temp[i];
+                    }
 
 
 //                Context context = getApplicationContext();
-                Toast.makeText(context, searchString[0], Toast.LENGTH_SHORT).show();
-                new AsyncTask<Void, Void, ArrayList<ItemContent>>() {
-                    String jsonStr1;
+                    Toast.makeText(context, searchString[0], Toast.LENGTH_SHORT).show();
+                    new AsyncTask<Void, Void, ArrayList<ItemContent>>() {
+                        String jsonStr1;
 
-                    @Override
-                    protected ArrayList<ItemContent> doInBackground(Void... params) {
-                        Log.v("before", "size of the array is" + array.size());
-                        array.clear();
-                        Log.v("middle", "size of the array is" + array.size());
-                        jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/flipkart.php?query=" + searchString[0]);
-                        try {
-                            if (jsonStr1.length() == 0) {
-                                Log.v("String", "zero lengthed string");
-                            } else
-                                getDataFromJson(jsonStr1);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        @Override
+                        protected ArrayList<ItemContent> doInBackground(Void... params) {
+                            Log.v("before", "size of the array is" + array.size());
+                            array.clear();
+                            Log.v("middle", "size of the array is" + array.size());
+                            jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/flipkart.php?query=" + searchString[0]);
+                            try {
+                                if (jsonStr1.length() == 0) {
+                                    Log.v("String", "zero lengthed string");
+                                } else
+                                    getDataFromJson(jsonStr1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.v("final", "size of the array is" + array.size());
+                            return array;
                         }
-                        Log.v("final", "size of the array is" + array.size());
-                        return array;
-                    }
 
-                    @Override
-                    protected void onPostExecute(ArrayList<ItemContent> result) {
+                        @Override
+                        protected void onPostExecute(ArrayList<ItemContent> result) {
 
-                        Log.v("result", "size of the array is" + result.size());
-                        adapter.notifyDataSetChanged();
-                        return;
-                    }
+                            Log.v("result", "size of the array is" + result.size());
+                            adapter.notifyDataSetChanged();
+                            sort.setVisibility(View.VISIBLE);
+                            filter.setVisibility(View.VISIBLE);
+                            return;
+                        }
 
 
-                }.execute();
+                    }.execute();
 
+                }
+                return false;
             }
         });
+
 
 
 //        try {

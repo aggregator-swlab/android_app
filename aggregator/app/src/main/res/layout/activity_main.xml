@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="100dp"
         android:orientation="vertical">
 
@@ -19,54 +19,59 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-
+            android:layout_height="wrap_content"
             tools:context=".MainActivity$PlaceholderFragment"
             tools:ignore="MergeRootFrame">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:background="#FFFFFF"
+
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin">
+                android:layout_marginTop="22dp"
+                >
 
                 <Button
                     android:id="@+id/sort"
-                    android:layout_width="170dp"
-                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_round"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:text="Sort"/>
+                    android:text="Sort"
+                    android:textColor="#FFFFFF"
+                    android:typeface="sans"
+                    android:textSize="8pt"
+                    />
 
                 <Button
+                    android:layout_marginLeft="4dp"
                     android:id="@+id/filter"
-                    android:layout_width="170dp"
+                    android:background="@drawable/button_round"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:text="Filter"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
-            </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:textColor="#FFFFFF"
+                    android:typeface="sans"
+                    android:textSize="8pt"/>
+            </LinearLayout>
         </FrameLayout>
 
         <FrameLayout
+            android:background="#FFFFFF"
             android:id="@+id/container2"
             android:layout_width="match_parent"
-            android:layout_height="900dp"
+            android:layout_height="match_parent"
             tools:context=".MainActivity">
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:indeterminate="true"
-                android:visibility="gone" />
-
 
             <ListView
                 android:id="@+id/list_view_product"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal|top"/>
 

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="120dp"
     >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:orientation="horizontal"
         android:background="#009caa">
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="80dp"
-            android:layout_margin="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="25dp"
             android:id="@+id/headerIcon"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/logo"
             />
         <LinearLayout
 
@@ -55,25 +56,27 @@
                     android:textColor="#FFFFFF" />
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="280dp"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginLeft="105dp">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
                 <EditText
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="10dp"
                     android:id="@+id/search_text"
-                    android:layout_width="220dp"
-                    android:hint="search a product...."
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF"
-                    android:layout_height="38dp" />
-                <ImageButton
-                    android:id="@+id/button"
-                    android:layout_width="30dp"
-                    android:layout_height="35dp"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/rounded_corners"
+                    android:hint="   What's your wish today?"
+                    android:textColor="#736F6E"
+                    android:textColorHint="#736F6E"
+                    android:layout_height="38dp"
+                    android:drawableLeft="@drawable/search"
+                    android:paddingLeft="10dp"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"/>
 
-                    android:src="@drawable/ic_launcher"
-                    style="?android:attr/borderlessButtonStyle"/>
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
