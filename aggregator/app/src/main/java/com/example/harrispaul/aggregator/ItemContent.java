@@ -11,13 +11,19 @@ public class ItemContent implements Serializable {
     private String title = "";
     private String imgid = "";
     private String description = "";
+    private String brand="";
     private String Maxprice = "";
     private String Sellingprice = "";
     private String id="";
+    public void setBrand (String id) {
+        this.brand = id;
+    }
+    public String getBrand() {
+        return brand;
+    }
     public void setId (String id) {
         this.id = id;
     }
-
     public String getId() {
         return id;
     }

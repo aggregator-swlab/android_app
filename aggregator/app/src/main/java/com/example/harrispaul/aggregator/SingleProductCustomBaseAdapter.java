@@ -41,7 +41,7 @@ public class SingleProductCustomBaseAdapter extends BaseAdapter{
     public long getItemId(int position) {
         return position;
     }
-    public ImageView img;
+    public ImageView img,shopIcon;
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
@@ -52,11 +52,28 @@ public class SingleProductCustomBaseAdapter extends BaseAdapter{
             holder.price = (TextView) convertView.findViewById(R.id.price);
             holder.description = (TextView) convertView.findViewById(R.id.description);
             img = (ImageView) convertView.findViewById(R.id.itemIcon);
+            shopIcon =(ImageView) convertView.findViewById(R.id.shopIcon);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        switch(searchArrayList.get(position).getDescription()){
+            case "FLIPKART" :
+                shopIcon.setImageResource(R.drawable.flipkart);
 
+                break;
+            case "SNAPDEAL" :
+                shopIcon.setImageResource(R.drawable.snapdeal);
+                break;
+            case "EBAY" :
+                shopIcon.setImageResource(R.drawable.ebay);
+                break;
+            case "AMAZON" :
+                shopIcon.setImageResource(R.drawable.amazon);
+                break;
+
+        }
         holder.txtName.setText(searchArrayList.get(position).getTitle());
         holder.description.setText(searchArrayList.get(position).getDescription());
         holder.price.setText("Price is " + searchArrayList.get(position).getmaxPrice());

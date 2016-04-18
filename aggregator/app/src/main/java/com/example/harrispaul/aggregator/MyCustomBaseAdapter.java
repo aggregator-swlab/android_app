@@ -45,7 +45,6 @@ public class MyCustomBaseAdapter extends BaseAdapter {
     }
     public ImageView img;
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.i("i was called "," " + position);
         ViewHolder holder;
 
         if (convertView == null) {
@@ -54,6 +53,7 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             holder.txtName = (TextView) convertView.findViewById(R.id.item);
             holder.txtCityState = (TextView) convertView.findViewById(R.id.textView1);
             img = (ImageView) convertView.findViewById(R.id.icon);
+            holder.price = (TextView)convertView.findViewById(R.id.price);
 
             convertView.setTag(holder);
         } else {
@@ -61,8 +61,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         }
 
         holder.txtName.setText(searchArrayList.get(position).getTitle());
-        holder.txtCityState.setText(searchArrayList.get(position).getDescription());
-        Bitmap bitmap;
+        holder.txtCityState.setText(searchArrayList.get(position).getBrand());
+        holder.price.setText("Rs." + searchArrayList.get(position).getSellingPrice());
         String Url = searchArrayList.get(position).getImgid();
         ImageId recv = new DownloadImageTask().getBitmap(Url);
         if(recv.getId()==Url){
@@ -75,9 +75,6 @@ public class MyCustomBaseAdapter extends BaseAdapter {
     static class ViewHolder {
         TextView txtName;
         TextView txtCityState;
+        TextView price;
     }
-
-
-
-
 }

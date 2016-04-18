@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -43,6 +46,7 @@ public class ProductContent extends Activity {
     ProgressBar progressBar;
     SingleProductCustomBaseAdapter adapter;
     Bitmap bitmap;
+    Button home,help,deals;
 
 
     @Override
@@ -59,10 +63,61 @@ public class ProductContent extends Activity {
         list = (ListView) findViewById(R.id.single_product_list);
 
         search = (EditText) findViewById(R.id.search_text);
+        home=(Button)findViewById(R.id.home);
+        help=(Button)findViewById(R.id.help);
+        deals=(Button)findViewById(R.id.deals);
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         list.setAdapter(adapter);
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    final String[] searchString = new String[1];
+                    searchString[0] = search.getText().toString();
+                    Context context = getApplicationContext();
+
+                    int duration = Toast.LENGTH_SHORT;
+                    String[] temp = search.getText().toString().split(" ");
+
+                    searchString[0] = temp[0];
+                    for (int i = 1; i < temp.length; i++) {
+                        searchString[0] += "+" + temp[i];
+                    }
+
+
+//                Context context = getApplicationContext();
+                    Toast.makeText(context, searchString[0], Toast.LENGTH_SHORT).show();
+                    new AsyncTask<Void, Void, String>() {
+                        String jsonStr1;
+
+                        @Override
+                        protected String doInBackground(Void... params) {
+                            jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/flipkart.php?query=" + searchString[0]);
+
+                            return jsonStr1;
+                        }
+
+                        @Override
+                        protected void onPostExecute(String result) {
+
+                            Log.v("result", "size of the array is" + result);
+                            Intent activityChangeIntent = new Intent(ProductContent.this, ProductContent.class);
+                            activityChangeIntent.putExtra("message", result);
+                            ProductContent.this.startActivity(activityChangeIntent);
+                            return;
+                        }
+
+
+                    }.execute();
+
+                }
+                return false;
+            }
+        });
+
         new AsyncTask<Void, Void, ArrayList<ItemContent>>() {
             String jsonStr1;
 
@@ -126,7 +181,15 @@ public class ProductContent extends Activity {
         });
     }
 
-
+    public void HomeIntent(View v) {
+        Intent activityChangeIntent = new Intent(ProductContent.this, ProductContent.class);
+        activityChangeIntent.putExtra("message","");
+        ProductContent.this.startActivity(activityChangeIntent);
+    }
+    public void dealIntent(View v) {
+        Intent activityChangeIntent = new Intent(ProductContent.this, Deals.class);
+        ProductContent.this.startActivity(activityChangeIntent);
+    }
     String fetch(String addr) {
         StringBuilder sb = new StringBuilder();
 

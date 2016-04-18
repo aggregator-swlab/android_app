@@ -8,12 +8,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -33,6 +37,7 @@ public class Deals extends Activity {
 
     ListView list;
     String jsonStr;
+    Button home,help;
     ArrayList<ItemContent> array = new ArrayList<ItemContent>();
     ImageButton enter;
     EditText search;
@@ -46,10 +51,8 @@ public class Deals extends Activity {
         adapter = new SingleProductCustomBaseAdapter(this, array);
 
         list = (ListView) findViewById(R.id.single_product_list);
-
+        home = (Button) findViewById(R.id.home);
         search = (EditText) findViewById(R.id.search_text);
-
-        enter = (ImageButton) findViewById(R.id.button);
 
 //        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -88,28 +91,56 @@ public class Deals extends Activity {
 
 
         }.execute();
-        final String[] searchString = new String[1];
-        enter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                searchString[0] = search.getText().toString();
-                Context context = getApplicationContext();
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
-                int duration = Toast.LENGTH_SHORT;
-                String[] temp = search.getText().toString().split(" ");
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    final String[] searchString = new String[1];
+                    searchString[0] = search.getText().toString();
+                    Context context = getApplicationContext();
 
-                searchString[0] = temp[0];
-                for (int i = 1; i < temp.length; i++) {
-                    searchString[0] += "+" + temp[i];
-                }
+                    int duration = Toast.LENGTH_SHORT;
+                    String[] temp = search.getText().toString().split(" ");
+
+                    searchString[0] = temp[0];
+                    for (int i = 1; i < temp.length; i++) {
+                        searchString[0] += "+" + temp[i];
+                    }
 
 
 //                Context context = getApplicationContext();
-                Toast.makeText(context, searchString[0], Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, searchString[0], Toast.LENGTH_SHORT).show();
+                    new AsyncTask<Void, Void, String>() {
+                        String jsonStr1;
+
+                        @Override
+                        protected String doInBackground(Void... params) {
+                            jsonStr1 = fetch("https://aggregator-scripts-azharullah.c9users.io/flipkart.php?query=" + searchString[0]);
+
+                            return jsonStr1;
+                        }
+
+                        @Override
+                        protected void onPostExecute(String result) {
+
+                            Log.v("result", "size of the array is" + result);
+                            Intent activityChangeIntent = new Intent(Deals.this, MainActivity.class);
+                            activityChangeIntent.putExtra("message", result);
+                            Deals.this.startActivity(activityChangeIntent);
+                            return;
+                        }
 
 
+                    }.execute();
+
+                }
+                return false;
             }
         });
+
+        final String[] searchString = new String[1];
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -128,8 +159,15 @@ public class Deals extends Activity {
             }
         });
     }
+    public void dealIntent(View v){
+        Log.i("same activity"," ");
+    }
 
-
+    public void HomeIntent(View v){
+        Intent activityChangeIntent = new Intent(Deals.this, MainActivity.class);
+        activityChangeIntent.putExtra("message","");
+        Deals.this.startActivity(activityChangeIntent);
+    }
     String fetch(String addr) {
         StringBuilder sb = new StringBuilder();
 

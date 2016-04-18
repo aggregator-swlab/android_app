@@ -23,7 +23,8 @@ public class OpenApp extends Activity {
                     i.printStackTrace();
 
                 } finally {
-                    Intent activiyt = new Intent(OpenApp.this, Menu.class);
+                    Intent activiyt = new Intent(OpenApp.this, MainActivity.class);
+                    activiyt.putExtra("message","");
                     startActivity(activiyt);
                 }
             }
