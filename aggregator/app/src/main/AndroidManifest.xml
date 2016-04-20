@@ -60,7 +60,6 @@
         <activity
             android:name=".Help"
             android:label="Help"
-            android:theme="@android:style/Theme"
             >
             <intent-filter>
                 <action android:name="com.example.harrispaul.aggregator.HELP" />

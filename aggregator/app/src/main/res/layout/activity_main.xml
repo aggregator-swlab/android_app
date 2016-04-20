@@ -60,7 +60,8 @@
                     android:layout_alignParentRight="true"
                     android:textColor="#FFFFFF"
                     android:typeface="sans"
-                    android:textSize="8pt"/>
+                    android:textSize="8pt"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 

@@ -2,11 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#006b75"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="18dp"
+            android:text="Help"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp" />
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollableContents"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginTop="60dp"
         android:background="#ffffff"
          >
 
@@ -86,7 +103,7 @@
                 android:layout_marginTop="22dp"
                 android:text="HOW TO USE LIBRA"
                 android:textColor="#006b75"
-                android:textSize="23px" />
+                android:textSize="23sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="17dp"
                 android:text="Can I sort my results?"
-                android:textSize="21px" />
+                android:textSize="21sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -117,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="17dp"
                 android:text="Will I be able to find latest deals and offers running on these sites?"
-                android:textSize="21px" />
+                android:textSize="21sp" />
 
             <TextView
                 android:layout_width="wrap_content"

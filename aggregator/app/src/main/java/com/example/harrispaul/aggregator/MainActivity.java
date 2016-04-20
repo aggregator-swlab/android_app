@@ -85,15 +85,10 @@ public class MainActivity  extends Activity  {
 
         search = (EditText) findViewById(R.id.search_text);
         sort.setVisibility(View.GONE);
-//        filter.setVisibility(View.GONE);
+        filter.setVisibility(View.GONE);
 //        final LinearLayout mainLayout=(LinearLayout)findViewById(R.id.homepng);
 //        mainLayout.setVisibility(LinearLayout.VISIBLE);
 //        this.root = (FlyInMenu) this.getLayoutInflater().inflate(R.layout.activity_main, null);
-
-
-
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
         list.setAdapter(adapter);
         if(jsonStr.length() != 0) {
             array.clear();
@@ -406,76 +401,57 @@ public class MainActivity  extends Activity  {
         LayoutInflater layoutInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = layoutInflater.inflate(R.layout.filter_popup, viewGroup);
-        toggleAdapter = new CheckBoxAdapter(context,toggle);
-        ListView listView = (ListView) layout.findViewById(R.id.brands);
-        listView.setAdapter(toggleAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        if(brands.size()!=0) {
+            toggleAdapter = new CheckBoxAdapter(context,toggle);
+            ListView listView = (ListView) layout.findViewById(R.id.brands);
+            listView.setAdapter(toggleAdapter);
+            minimum = (TextView) layout.findViewById(R.id.min);
+            now = (TextView) layout.findViewById(R.id.now);
+            maximum = (TextView) layout.findViewById(R.id.max);
+            minimum.setText(Integer.toString((int)min));
+            maximum.setText(Integer.toString((int)max));
+            now.setText(Integer.toString(pro));
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3) {
-                // TODO Auto-generated method stub
-                CheckBox checkboxBrand=(CheckBox)arg1.findViewById(R.id.checkbox);
-                if(checkboxBrand.isChecked()){
-                    checkboxBrand.setChecked(false);
-                    array.clear();
-                    for(int i=0;i<array1.size();i++){
-                        if(!array1.get(i).getBrand().equals(checkboxBrand.getText())){
-                            array.add(array1.get(i));
-                        }
-                    }
-                }
-                else{
-                    checkboxBrand.setChecked(false);
-                    for(int i=0;i<array1.size();i++){
-                        if(array1.get(i).getBrand().equals(checkboxBrand.getText())){
-                            array.add(array1.get(i));
-                        }
-                    }
-                }
-            }
+            SeekBar priceFilter = (SeekBar) layout.findViewById(R.id.seekBar);
 
-        });
-
-        minimum = (TextView) layout.findViewById(R.id.min);
-        now = (TextView) layout.findViewById(R.id.now);
-        maximum = (TextView) layout.findViewById(R.id.max);
-        minimum.setText(Integer.toString((int)min));
-        maximum.setText(Integer.toString((int)max));
-        now.setText(Integer.toString(pro));
-
-        SeekBar priceFilter = (SeekBar) layout.findViewById(R.id.seekBar);
-
-        priceFilter.setMax((int)(max-min));
-        priceFilter.setProgress(50);
-        priceFilter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-        {
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            priceFilter.setMax((int)(max-min));
+            priceFilter.setProgress(50);
+            priceFilter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
             {
-                pro=(int)min + progress;
-                now.setText(Integer.toString(pro));
-            }
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+                {
+                    pro=(int)min + progress;
+                    now.setText(Integer.toString(pro));
+                }
 
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+                public void onStartTrackingTouch(SeekBar seekBar) {}
 
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                //we can use the progress value of pro as anywhere
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    //we can use the progress value of pro as anywhere
 
-                final Toast toast =  Toast.makeText(getBaseContext(), String.valueOf(pro),Toast.LENGTH_SHORT);
-                toast.show();
-                Integer i=0;
-                ArrayList<ItemContent> array2=new ArrayList<ItemContent>();
-                array2=array;
-                array.clear();
+                    final Toast toast =  Toast.makeText(getBaseContext(), String.valueOf(pro),Toast.LENGTH_SHORT);
+                    toast.show();
+                    Integer i=0;
+                    ArrayList<ItemContent> array2=new ArrayList<ItemContent>();
+                    array2=array;
+                    array.clear();
 
-                for(i=0;i<array2.size();i++){
-                    ItemContent o = array1.get(i);
-                    if((int)Double.parseDouble(o.getSellingPrice()) < pro){
-                        array.add(o);
+                    for(i=0;i<array2.size();i++){
+                        ItemContent o = array1.get(i);
+                        if((int)Double.parseDouble(o.getSellingPrice()) < pro){
+                            Log.i("added " + i,o.getBrand());
+                            array.add(o);
+                        }
                     }
-            }
+                    adapter.notifyDataSetChanged();
+
+                }
+            });
         }
-        });
+
+
+
+
 
         // Creating the PopupWindow
         final PopupWindow popup = new PopupWindow(context);
@@ -512,6 +488,12 @@ public class MainActivity  extends Activity  {
             for(int i=0;i<array1.size();i++){
                 if(array1.get(i).getBrand().equals(checkboxBrand.getText())){
                     array.add(array1.get(i));
+                    if(lowToHigh == 1){
+                        Collections.sort(array, StringAscComparator);
+                    }
+                    if(highToLow ==0){
+                        Collections.sort(array, StringDescComparator);
+                    }
                 }
             }
             for(int i=0;i<toggle.size();i++){
@@ -524,6 +506,12 @@ public class MainActivity  extends Activity  {
             for(int i=0;i<array.size();i++){
                 if(array.get(i).getBrand().equals(checkboxBrand.getText())){
                     array.remove(i);
+                    if(lowToHigh == 1){
+                        Collections.sort(array, StringAscComparator);
+                    }
+                    if(highToLow ==0){
+                        Collections.sort(array, StringDescComparator);
+                    }
                 }
             }
             for(int i=0;i<toggle.size();i++){
