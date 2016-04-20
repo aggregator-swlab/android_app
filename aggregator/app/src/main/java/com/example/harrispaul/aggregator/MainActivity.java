@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -69,6 +70,7 @@ public class MainActivity  extends Activity  {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Button home =(Button) findViewById(R.id.home);
 
+
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         jsonStr = bundle.getString("message");
@@ -83,7 +85,9 @@ public class MainActivity  extends Activity  {
 
         search = (EditText) findViewById(R.id.search_text);
         sort.setVisibility(View.GONE);
-        filter.setVisibility(View.GONE);
+//        filter.setVisibility(View.GONE);
+//        final LinearLayout mainLayout=(LinearLayout)findViewById(R.id.homepng);
+//        mainLayout.setVisibility(LinearLayout.VISIBLE);
 //        this.root = (FlyInMenu) this.getLayoutInflater().inflate(R.layout.activity_main, null);
 
 
@@ -93,6 +97,7 @@ public class MainActivity  extends Activity  {
         list.setAdapter(adapter);
         if(jsonStr.length() != 0) {
             array.clear();
+//            mainLayout.setVisibility(LinearLayout.GONE);
             adapter.notifyDataSetChanged();
             try {
                 if (jsonStr.length() != 0) {
@@ -111,6 +116,7 @@ public class MainActivity  extends Activity  {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                    mainLayout.setVisibility(LinearLayout.GONE);
                     final String[] searchString = new String[1];
                     searchString[0] = search.getText().toString();
                     Context context = getApplicationContext();
@@ -204,6 +210,10 @@ public class MainActivity  extends Activity  {
     public void HomeIntent(View v){
         Log.i("same activity","");
         return;
+    }
+    public void HelpIntent(View v){
+        Intent activityChangeIntent = new Intent(MainActivity.this, Help.class);
+        MainActivity.this.startActivity(activityChangeIntent);
     }
 
     String fetch(String addr) {

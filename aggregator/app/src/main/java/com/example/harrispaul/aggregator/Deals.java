@@ -168,6 +168,11 @@ public class Deals extends Activity {
         activityChangeIntent.putExtra("message","");
         Deals.this.startActivity(activityChangeIntent);
     }
+    public void HelpIntent(View v){
+        Intent activityChangeIntent = new Intent(Deals.this, Help.class);
+        activityChangeIntent.putExtra("message","");
+        Deals.this.startActivity(activityChangeIntent);
+    }
     String fetch(String addr) {
         StringBuilder sb = new StringBuilder();
 

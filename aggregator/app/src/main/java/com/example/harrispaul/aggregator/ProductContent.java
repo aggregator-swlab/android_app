@@ -190,6 +190,10 @@ public class ProductContent extends Activity {
         Intent activityChangeIntent = new Intent(ProductContent.this, Deals.class);
         ProductContent.this.startActivity(activityChangeIntent);
     }
+    public void HelpIntent(View v) {
+        Intent activityChangeIntent = new Intent(ProductContent.this, Help.class);
+        ProductContent.this.startActivity(activityChangeIntent);
+    }
     String fetch(String addr) {
         StringBuilder sb = new StringBuilder();
 

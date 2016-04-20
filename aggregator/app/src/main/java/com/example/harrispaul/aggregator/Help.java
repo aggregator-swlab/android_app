@@ -24,4 +24,7 @@ public class Help extends Activity {
         Intent activityChangeIntent = new Intent(Help.this, MainActivity.class);
         Help.this.startActivity(activityChangeIntent);
     }
+    public void HelpIntent(View v){
+        return;
+    }
 }
